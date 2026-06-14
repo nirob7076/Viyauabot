@@ -1,0 +1,48 @@
+-- Users Table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    tg_id BIGINT UNIQUE NOT NULL,
+    first_name TEXT,
+    photo_url TEXT,
+    balance DECIMAL(10,4) DEFAULT 0.0000,
+    total_tasks INT DEFAULT 0,
+    total_ads INT DEFAULT 0,
+    ref_code TEXT UNIQUE NOT NULL,
+    referred_by TEXT,
+    is_banned BOOLEAN DEFAULT FALSE,
+    typing_done_today INT DEFAULT 0,
+    ads_watched_today INT DEFAULT 0,
+    last_active DATE DEFAULT CURRENT_DATE
+);
+
+-- Settings Table (Admin কন্ট্রোল করবে)
+CREATE TABLE settings (
+    id INT PRIMARY KEY DEFAULT 1,
+    ref_bonus DECIMAL(10,4) DEFAULT 0.05,
+    monetag_zone_id TEXT DEFAULT '1234567',
+    ad_bonus DECIMAL(10,4) DEFAULT 0.02,
+    daily_ad_limit INT DEFAULT 10,
+    typing_bonus DECIMAL(10,4) DEFAULT 0.01,
+    daily_typing_limit INT DEFAULT 20,
+    top_marquee_text TEXT DEFAULT 'স্বাগতম আমাদের অ্যাপে!'
+);
+INSERT INTO settings (id) VALUES (1);
+
+-- Daily Tasks Table
+CREATE TABLE daily_tasks (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    instruction TEXT,
+    link TEXT,
+    channel_username TEXT, -- ভেরিফাই করার জন্য (ex: @mychannel)
+    image_url TEXT,
+    bonus DECIMAL(10,4) DEFAULT 0.05
+);
+
+-- Completed Tasks Track
+CREATE TABLE user_tasks (
+    id SERIAL PRIMARY KEY,
+    user_tg_id BIGINT,
+    task_id INT,
+    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
